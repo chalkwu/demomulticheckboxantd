@@ -11,6 +11,7 @@
                             option-filter-prop="children"
                             mode="multiple"
                             :maxTagCount="3"
+                            @change="changeSelect"
                     >
                         <div slot="dropdownRender" slot-scope="menu">
                             <v-nodes :vnodes="menu" />
@@ -20,7 +21,7 @@
                                 <a-button type="link" @click="clearAll">清空</a-button>
                             </div>
                         </div>
-                        <a-select-option v-for="item in selectOptions" :value="item.mockKey" :key="item.mockKey">
+                        <a-select-option v-for="item in selectOptions" :value="item.mockLabel" :key="item.mockKey">
                             {{ item.mockLabel }}
                         </a-select-option>
                     </a-select>
@@ -42,6 +43,7 @@
         },
         data () {
             return {
+                selectedequip: [],
                 form: this.$form.createForm(this),
                 selectOptions: [
                     {
@@ -61,29 +63,40 @@
             }
         },
         mounted () {
-            this.getMemberList()
+            this.getMesDbList()
         },
         methods: {
+            changeSelect (value){
+              // console.log(value)
+                this.selectedequip = value
+                console.log(this.selectedequip)
+            },
             // 获取数据源，根据实际自己改
-            getMemberList () {
+            getMesDbList () {
                 this.selectOptionsLoading = false
                 // this.selectOptions = res.rows
             },
             // 全选 -- 把数据源赋给select绑定的值
             selectAll () {
-                const arr = [];
-                (this.selectOptions).forEach(item => {
+                const arr = []
+                const arrlb = []
+                this.selectOptions.forEach(item => {
                     arr.push(item.mockKey)
+                    arrlb.push(item.mockLabel)
                 })
                 this.form.setFieldsValue({
                     equip: arr
                 })
+                this.selectedequip = arrlb
+                console.log(this.selectedequip)
             },
             // 清空 -- 清空select绑定的值
             clearAll () {
                 this.form.setFieldsValue({
                     equip: []
                 })
+                this.selectedequip = []
+                console.log(this.selectedequip)
             }
         }
 
